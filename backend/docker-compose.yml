@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  node:
+    image: node:20
+    container_name: node-app
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "3000:3000"
+    command: "npm run dev"
+    depends_on:
+      - mysql
+    environment:
+      - API_PORT=3000
+      - DB_HOST=mysql
+      - DB_USER=admin
+      - DB_PASSWORD=Lbim@2201
+      - DB_NAME=aaiena
+      - JWT_SECRET_KEY=zw@uhgdwe
+      - JWT_TIMEOUT_DURATION=30D
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Lbim@2201
+      MYSQL_DATABASE: aaiena
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: Lbim@2201
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: Lbim@2201
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:
